@@ -1,0 +1,1067 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#050D1F;--bg2:#0A1628;--bg3:#0F1E35;
+--surface:rgba(10,22,44,0.7);--surface2:rgba(15,28,55,0.6);
+--blue:#3B82F6;--blue2:#1E3A8A;--blue3:#60A5FA;--blue4:#93C5FD;
+--text:#F0F6FF;--text2:#94A3B8;--text3:#64748B;
+--border:rgba(59,130,246,0.13);--border2:rgba(59,130,246,0.28);
+--accent:#F59E0B;--success:#10B981;--danger:#EF4444;
+--r:14px;--r2:20px;--r3:28px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4,h5{font-family:'Sora',sans-serif}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease}
+#loader.hide{opacity:0;pointer-events:none}
+.ldr-ring{width:90px;height:90px;border-radius:50%;border:2px solid rgba(59,130,246,0.15);border-top-color:#3B82F6;animation:spin 1s linear infinite;margin-bottom:24px;display:flex;align-items:center;justify-content:center}
+.ldr-logo{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#fff}
+.ldr-text{font-size:13px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
+.ldr-bar{width:180px;height:2px;background:rgba(59,130,246,0.15);border-radius:99px;overflow:hidden}
+.ldr-fill{height:100%;background:linear-gradient(90deg,#1E3A8A,#3B82F6,#93C5FD);animation:fill 2s ease forwards}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fill{from{width:0}to{width:100%}}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(5,13,31,0.88);backdrop-filter:blur(24px) saturate(1.5);border-bottom:1px solid var(--border);transition:all 0.3s}
+#nav.scrolled{background:rgba(5,13,31,0.97);box-shadow:0 4px 30px rgba(0,0,0,0.4)}
+.nl{display:flex;align-items:center;gap:10px;cursor:pointer}
+.nl-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:13px;color:#fff}
+.nl-text{font-family:'Sora',sans-serif;font-weight:700;font-size:16px}
+.nav-links{display:flex;gap:2px}
+.nlink{padding:7px 12px;border-radius:7px;font-size:13.5px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;border:none;background:none}
+.nlink:hover,.nlink.on{color:var(--text);background:rgba(59,130,246,0.1)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn{padding:8px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px}
+.bp{background:linear-gradient(135deg,#1E3A8A,#3B82F6);color:#fff;box-shadow:0 4px 16px rgba(59,130,246,0.25)}
+.bp:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(59,130,246,0.38)}
+.bg{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.bg:hover{color:var(--text);border-color:rgba(59,130,246,0.5)}
+.bsm{padding:7px 14px;font-size:12px}
+.theme-btn{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s}
+.theme-btn:hover{border-color:var(--blue)}
+.lang-sw{display:flex;gap:2px;padding:3px;background:rgba(59,130,246,0.05);border-radius:7px;border:1px solid var(--border)}
+.lb{padding:4px 9px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(--text3);border:none;background:none}
+.lb.on{background:rgba(59,130,246,0.2);color:var(--blue3)}
+
+/* PAGES */
+.pg{display:none;min-height:100vh;padding-top:68px}
+.pg.on{display:block}
+
+/* HERO */
+.hero{position:relative;min-height:calc(100vh - 68px);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=80') center/cover no-repeat;filter:brightness(0.25) saturate(0.8)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,13,31,0.3) 0%,rgba(5,13,31,0.1) 40%,rgba(5,13,31,0.85) 100%)}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.05) 1px,transparent 1px);background-size:56px 56px}
+.hero-content{position:relative;z-index:2;text-align:center;padding:40px 20px;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 16px;border-radius:99px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.28);font-size:11.5px;font-weight:600;color:var(--blue3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:26px;animation:fadeUp 0.6s ease both}
+.bdot{width:5px;height:5px;border-radius:50%;background:var(--blue3);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(38px,7vw,80px);font-weight:800;line-height:1.05;letter-spacing:-2.5px;margin-bottom:22px;background:linear-gradient(140deg,#fff 0%,#93C5FD 55%,#3B82F6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeUp 0.7s 0.1s ease both}
+.hero-sub{font-size:17px;color:rgba(240,246,255,0.7);max-width:520px;margin:0 auto 40px;line-height:1.75;animation:fadeUp 0.7s 0.2s ease both}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.7s 0.3s ease both}
+.scroll-ind{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;opacity:0.5;transition:opacity 0.2s;animation:fadeUp 0.7s 0.5s ease both}
+.scroll-ind:hover{opacity:0.9}
+.scroll-arrow{width:20px;height:20px;border-right:1.5px solid var(--text2);border-bottom:1.5px solid var(--text2);transform:rotate(45deg);animation:bounce 2s infinite}
+.scroll-text{font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
+@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(4px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS BAR */
+.stats-bar{background:rgba(10,22,44,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 40px;display:flex;justify-content:center;gap:0}
+.stat-item{flex:1;max-width:200px;text-align:center;padding:0 24px;position:relative}
+.stat-item+.stat-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:1px;height:40px;background:var(--border)}
+.stat-num{font-family:'Sora',sans-serif;font-size:34px;font-weight:800;background:linear-gradient(135deg,#fff,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:4px}
+.stat-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px}
+
+/* SECTIONS */
+.sec{padding:80px 40px;max-width:1160px;margin:0 auto}
+.sec-badge{display:inline-block;padding:4px 14px;border-radius:99px;background:rgba(59,130,246,0.1);border:1px solid var(--border2);font-size:11px;font-weight:600;color:var(--blue3);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:14px}
+.sec-title{font-size:clamp(26px,3.5vw,44px);font-weight:700;line-height:1.15;margin-bottom:14px;letter-spacing:-0.5px}
+.sec-sub{color:var(--text2);font-size:15.5px;max-width:500px;line-height:1.75}
+.dvd{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 40px}
+
+/* GLASS */
+.glass{background:var(--surface);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r2);transition:all 0.3s}
+.glass:hover{border-color:var(--border2)}
+
+/* PHOTO GALLERY */
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:240px 220px;gap:12px;border-radius:var(--r2);overflow:hidden}
+.gallery-item{overflow:hidden;position:relative;cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-item:first-child{grid-row:1/3}
+.gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(5,13,31,0.9));font-size:12px;font-weight:600;opacity:0;transition:opacity 0.3s;color:#fff}
+.gallery-item:hover .gallery-caption{opacity:1}
+.gallery-more{position:absolute;inset:0;background:rgba(5,13,31,0.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.gallery-more-num{font-family:'Sora',sans-serif;font-size:28px;font-weight:700;color:#fff}
+.gallery-more-text{font-size:12px;color:rgba(255,255,255,0.7)}
+
+/* ABOUT SPLIT */
+.about-split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-img-wrap{position:relative;border-radius:var(--r2);overflow:hidden}
+.about-img-wrap img{width:100%;height:420px;object-fit:cover;border-radius:var(--r2)}
+.about-img-badge{position:absolute;bottom:24px;left:24px;background:rgba(5,13,31,0.9);backdrop-filter:blur(16px);border:1px solid var(--border2);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.about-badge-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:18px}
+.about-badge-num{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;line-height:1}
+.about-badge-lbl{font-size:11px;color:var(--text3)}
+
+/* FEATURE CARDS */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feat-card{padding:26px;border-radius:var(--r2)}
+.feat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;flex-shrink:0}
+.ic-b{background:rgba(59,130,246,0.15)}
+.ic-g{background:rgba(16,185,129,0.15)}
+.ic-a{background:rgba(245,158,11,0.15)}
+.ic-p{background:rgba(139,92,246,0.15)}
+.ic-r{background:rgba(239,68,68,0.15)}
+.ic-t{background:rgba(6,182,212,0.15)}
+.feat-card h3{font-size:16px;font-weight:600;margin-bottom:7px}
+.feat-card p{font-size:13.5px;color:var(--text2);line-height:1.65}
+
+/* CAMPUS LIFE SLIDER */
+.campus-slides{position:relative;border-radius:var(--r2);overflow:hidden;height:420px}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 0.7s ease}
+.slide.on{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(5,13,31,0.85) 0%,rgba(5,13,31,0.3) 60%,transparent 100%)}
+.slide-content{position:absolute;left:48px;top:50%;transform:translateY(-50%);max-width:360px}
+.slide-tag{display:inline-block;padding:3px 12px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.slide-content h3{font-size:26px;font-weight:700;margin-bottom:10px;color:#fff;line-height:1.3}
+.slide-content p{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.65}
+.slide-dots{position:absolute;bottom:24px;left:48px;display:flex;gap:7px}
+.sdot{width:24px;height:3px;border-radius:99px;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s}
+.sdot.on{background:#3B82F6;width:36px}
+.slide-arrows{position:absolute;bottom:16px;right:24px;display:flex;gap:8px}
+.sarr{width:36px;height:36px;border-radius:50%;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.2s;color:#fff}
+.sarr:hover{background:rgba(59,130,246,0.4)}
+
+/* NEWS */
+.news-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:18px}
+.news-big{padding:0;overflow:hidden}
+.news-big-img{height:220px;overflow:hidden}
+.news-big-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+.news-big:hover .news-big-img img{transform:scale(1.05)}
+.news-big-body{padding:22px}
+.news-sm{padding:22px;display:flex;flex-direction:column;gap:10px}
+.ntag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.te{background:rgba(245,158,11,0.15);color:#F59E0B}
+.tv{background:rgba(16,185,129,0.15);color:#10B981}
+.tu{background:rgba(239,68,68,0.15);color:#EF4444}
+.ta{background:rgba(59,130,246,0.15);color:#60A5FA}
+.ndate{font-size:11.5px;color:var(--text3)}
+.ntitle{font-size:15px;font-weight:600;line-height:1.4;color:var(--text)}
+.nexc{font-size:13px;color:var(--text2);line-height:1.55}
+
+/* TESTIMONIALS */
+.testi-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.testi{padding:26px}
+.stars{color:#F59E0B;font-size:12px;letter-spacing:3px;margin-bottom:14px}
+.testi-q{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:20px;font-style:italic}
+.testi-foot{display:flex;align-items:center;gap:12px}
+.tav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.tname{font-size:14px;font-weight:600}
+.trole{font-size:11.5px;color:var(--text3)}
+
+/* ACHIEVEMENTS */
+.ach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ach-card{padding:24px 20px;text-align:center;border-radius:var(--r2)}
+.ach-icon{font-size:28px;margin-bottom:12px}
+.ach-num{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,#fff,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ach-lbl{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* FACILITIES */
+.fac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fac-card{position:relative;border-radius:var(--r2);overflow:hidden;height:200px;cursor:pointer}
+.fac-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+.fac-card:hover img{transform:scale(1.08)}
+.fac-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,13,31,0.92) 0%,rgba(5,13,31,0.2) 60%,transparent 100%)}
+.fac-body{position:absolute;bottom:0;left:0;right:0;padding:20px}
+.fac-icon{font-size:22px;margin-bottom:6px}
+.fac-name{font-size:15px;font-weight:700;color:#fff}
+.fac-desc{font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px}
+
+/* EVENTS */
+.events-list{display:flex;flex-direction:column;gap:12px;max-width:700px}
+.event-item{display:flex;gap:18px;padding:18px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);align-items:flex-start;transition:all 0.2s;cursor:pointer}
+.event-item:hover{border-color:var(--blue);transform:translateX(4px)}
+.event-date{min-width:52px;text-align:center}
+.event-day{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--blue3);line-height:1}
+.event-month{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.event-body{flex:1}
+.event-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.event-meta{font-size:12px;color:var(--text3);display:flex;gap:12px}
+.event-tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+
+/* PORTAL / AUTH */
+.auth-wrap{max-width:420px;margin:0 auto;padding:70px 20px}
+.auth-card{padding:30px;border-radius:var(--r3)}
+.auth-logo{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;color:#fff;font-size:20px;margin:0 auto 14px}
+.rtabs{display:flex;gap:6px;padding:5px;background:rgba(59,130,246,0.05);border-radius:10px;border:1px solid var(--border);margin-bottom:20px}
+.rtab{flex:1;padding:8px;border-radius:7px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;transition:all 0.2s;color:var(--text3)}
+.rtab.on{background:var(--blue2);color:#fff}
+.fi{margin-bottom:14px}
+.fl{display:block;font-size:12.5px;font-weight:500;color:var(--text2);margin-bottom:5px}
+.finp{width:100%;padding:11px 14px;border-radius:9px;background:rgba(59,130,246,0.06);border:1px solid var(--border);color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s}
+.finp:focus{border-color:var(--blue);background:rgba(59,130,246,0.08)}
+.finp::placeholder{color:var(--text3)}
+.ferr{color:#EF4444;font-size:12px;margin-bottom:10px;display:none}
+
+/* DASHBOARD */
+.dash-wrap{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 68px)}
+.dsb{background:var(--bg2);border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.dsb-user{padding:14px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);margin-bottom:20px;text-align:center}
+.dsb-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin:0 auto 8px}
+.dsb-nm{font-size:14px;font-weight:600}
+.dsb-rl{font-size:10.5px;color:var(--blue3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.dsi{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s}
+.dsi:hover{color:var(--text);background:rgba(59,130,246,0.07)}
+.dsi.on{color:var(--text);background:rgba(59,130,246,0.11);border:1px solid rgba(59,130,246,0.2)}
+.dsi-ico{font-size:15px;width:18px;text-align:center}
+.dc{padding:28px;background:var(--bg);flex:1;overflow-y:auto}
+.dc-greet{font-size:21px;font-weight:700;margin-bottom:4px}
+.dc-sub{font-size:13.5px;color:var(--text2);margin-bottom:28px}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.sc{padding:18px;border-radius:var(--r)}
+.sc-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sc-val{font-family:'Sora',sans-serif;font-size:26px;font-weight:700;margin-bottom:3px}
+.sc-ch{font-size:12px;color:var(--success)}
+.chart-box{padding:22px;border-radius:var(--r);margin-bottom:18px}
+.cb-title{font-size:14px;font-weight:600;margin-bottom:18px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{padding:10px 14px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.tbl td{padding:11px 14px;border-bottom:1px solid rgba(59,130,246,0.04);color:var(--text2)}
+.tbl tr:hover td{background:rgba(59,130,246,0.02);color:var(--text)}
+.gb{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:700}
+.ga{background:rgba(16,185,129,0.15);color:#10B981}
+.gb2{background:rgba(59,130,246,0.15);color:#60A5FA}
+.gc{background:rgba(245,158,11,0.15);color:#F59E0B}
+
+/* RESULTS */
+.rs-wrap{padding:60px 40px;max-width:820px;margin:0 auto}
+.rs-box{display:flex;gap:10px;margin:22px 0}
+.rs-inp{flex:1;padding:13px 18px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:14.5px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s}
+.rs-inp:focus{border-color:var(--blue)}
+.rs-card{padding:28px;border-radius:var(--r2);margin-top:22px}
+.rs-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.rs-hdr h3{font-size:19px;font-weight:700;margin-bottom:3px}
+.rs-hdr p{font-size:12.5px;color:var(--text3)}
+.gpa-big{text-align:right}
+.gpa-n{font-family:'Sora',sans-serif;font-size:48px;font-weight:800;background:linear-gradient(135deg,#3B82F6,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.gpa-l{font-size:10.5px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+
+/* ADMISSIONS */
+.adm-hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));padding:60px 40px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.adm-hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=1400&q=70') center/cover;opacity:0.12}
+.adm-hero-content{position:relative;z-index:1}
+.fac-sec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.fac-sec-card{padding:22px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);text-align:center;transition:all 0.3s}
+.fac-sec-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.fac-sec-icon{font-size:28px;margin-bottom:10px}
+.fac-sec-card h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.fac-sec-card p{font-size:12px;color:var(--text3)}
+.step-item{display:flex;gap:14px;padding:18px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);margin-bottom:10px}
+.step-n{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1E3A8A,#3B82F6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+
+/* NOTIFICATIONS */
+.ni-wrap{padding:60px 40px;max-width:800px;margin:0 auto}
+.ni-filters{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 24px}
+.nf-btn{padding:7px 15px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all 0.2s}
+.nf-btn.on,.nf-btn:hover{background:rgba(59,130,246,0.12);border-color:var(--blue);color:var(--text)}
+.nitem{display:flex;gap:13px;padding:16px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface2);margin-bottom:9px;cursor:pointer;transition:all 0.2s;align-items:flex-start}
+.nitem:hover{border-color:var(--blue)}
+.nitem.unrd{border-left:2px solid var(--blue)}
+.ni-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ni-bdy{flex:1}
+.ni-ttl{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.ni-txt{font-size:12.5px;color:var(--text2);line-height:1.55}
+.ni-time{font-size:11px;color:var(--text3);margin-top:5px}
+.ni-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:5px}
+
+/* ABOUT */
+.ab-wrap{padding:60px 40px;max-width:1100px;margin:0 auto}
+.tl{position:relative;padding-left:28px;max-width:580px}
+.tl::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1.5px;background:linear-gradient(180deg,var(--blue),transparent)}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-dot{position:absolute;left:-25px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2.5px solid var(--bg)}
+.tl-yr{font-size:11.5px;color:var(--blue3);font-weight:600;margin-bottom:3px}
+.tl-ttl{font-size:14.5px;font-weight:600;margin-bottom:5px}
+.tl-txt{font-size:13px;color:var(--text2);line-height:1.65}
+.staff-g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+.stf{padding:20px;text-align:center;border-radius:var(--r2)}
+.stf:hover{transform:translateY(-3px)}
+.stf-av{width:60px;height:60px;border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+.stf-nm{font-size:14px;font-weight:600;margin-bottom:3px}
+.stf-rl{font-size:11.5px;color:var(--text3)}
+
+/* CONTACT */
+.ct-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:36px;max-width:880px;margin:0 auto}
+.ci{display:flex;gap:12px;padding:14px;border-radius:var(--r);background:var(--surface2);border:1px solid var(--border);margin-bottom:10px;align-items:flex-start}
+.ci-icon{width:38px;height:38px;border-radius:9px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ci-lbl{font-size:11px;color:var(--text3);margin-bottom:2px}
+.ci-val{font-size:13.5px;font-weight:500}
+.map-ph{height:180px;border-radius:var(--r);background:url('https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600&q=60') center/cover;border:1px solid var(--border);position:relative;margin-bottom:14px;overflow:hidden}
+.map-ph-over{position:absolute;inset:0;background:rgba(5,13,31,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.map-ph-over span{font-size:28px}
+.map-ph-over p{font-size:12px;color:rgba(255,255,255,0.7)}
+textarea.finp{resize:vertical;min-height:90px}
+
+/* CHATBOT */
+.cb-btn{position:fixed;bottom:26px;right:26px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#1E3A8A,#3B82F6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:600;box-shadow:0 4px 20px rgba(59,130,246,0.4);transition:all 0.3s}
+.cb-btn:hover{transform:scale(1.1)}
+.cb-win{position:fixed;bottom:88px;right:26px;width:290px;border-radius:16px;background:var(--bg2);border:1px solid var(--border);z-index:600;overflow:hidden;display:none;flex-direction:column}
+.cb-win.open{display:flex}
+.cb-hdr{padding:13px 15px;background:linear-gradient(135deg,#0F172A,#1E3A8A);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cb-hdr-t{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+.cb-online{width:6px;height:6px;border-radius:50%;background:#10B981}
+.cb-msgs{height:220px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.cm{padding:9px 11px;border-radius:9px;font-size:12.5px;max-width:88%;line-height:1.5}
+.cm.bot{background:var(--surface2);border:1px solid var(--border);align-self:flex-start}
+.cm.usr{background:var(--blue2);align-self:flex-end}
+.cb-inp{padding:9px;border-top:1px solid var(--border);display:flex;gap:7px}
+.cb-inp input{flex:1;padding:7px 11px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:12.5px;font-family:'DM Sans',sans-serif;outline:none}
+.cb-inp button{padding:7px 11px;border-radius:7px;background:var(--blue);border:none;color:#fff;cursor:pointer;font-size:12.5px}
+
+/* LIGHT MODE */
+body.light{--bg:#F6F8FF;--bg2:#EDF1FC;--bg3:#E1E8F8;--surface:rgba(255,255,255,0.85);--surface2:rgba(237,241,252,0.9);--text:#0F172A;--text2:#334155;--text3:#64748B;--border:rgba(59,130,246,0.12);--border2:rgba(59,130,246,0.25)}
+body.light #nav{background:rgba(246,248,255,0.92)}
+body.light .dsb{background:var(--bg2)}
+body.light .finp,.light .rs-inp,.light .cb-inp input{background:#fff;color:#0F172A}
+body.light .hero-bg-img{filter:brightness(0.35) saturate(0.7)}
+body.light .glass{background:rgba(255,255,255,0.8)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:50px 40px 28px}
+.ft-g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1100px;margin:0 auto 36px}
+.ft-brand p{font-size:13px;color:var(--text3);line-height:1.7;margin-top:11px;max-width:260px}
+.ft-col h5{font-size:13px;font-weight:600;margin-bottom:13px;color:var(--text)}
+.fl2{display:block;font-size:13px;color:var(--text3);text-decoration:none;cursor:pointer;padding:2.5px 0;transition:color 0.2s}
+.fl2:hover{color:var(--blue3)}
+.ft-bot{max-width:1100px;margin:0 auto;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ft-bot p{font-size:12px;color:var(--text3)}
+.ft-social{display:flex;gap:10px}
+.soc{width:30px;height:30px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all 0.2s}
+.soc:hover{border-color:var(--blue);background:rgba(59,130,246,0.1)}
+
+@media(max-width:900px){
+  #nav{padding:0 16px}.nav-links{display:none}.hero h1{font-size:38px}
+  .sec{padding:50px 20px}.feat-grid,.news-row,.testi-wrap,.ach-grid,.fac-grid,.fac-sec-grid{grid-template-columns:1fr}
+  .about-split,.ct-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .gallery-item:first-child{grid-row:auto}
+  .dash-wrap{grid-template-columns:1fr}.dsb{display:none}.sg{grid-template-columns:1fr 1fr}
+  .stats-bar{flex-wrap:wrap;gap:20px}.ft-g{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<div id="loader">
+  <div class="ldr-ring"><div class="ldr-logo">HA</div></div>
+  <div class="ldr-text">Horizon Academy</div>
+  <div class="ldr-bar"><div class="ldr-fill"></div></div>
+</div>
+
+<nav id="nav">
+  <div class="nl" onclick="go('home')">
+    <div class="nl-icon">HA</div>
+    <span class="nl-text">Horizon Academy</span>
+  </div>
+  <div class="nav-links">
+    <span class="nlink on" onclick="go('home',this)">Home</span>
+    <span class="nlink" onclick="go('about',this)">About</span>
+    <span class="nlink" onclick="go('admissions',this)">Admissions</span>
+    <span class="nlink" onclick="go('results',this)">Results</span>
+    <span class="nlink" onclick="go('notifs',this)">Notices</span>
+    <span class="nlink" onclick="go('contact',this)">Contact</span>
+  </div>
+  <div class="nav-right">
+    <div class="lang-sw">
+      <button class="lb on">EN</button>
+      <button class="lb">සිං</button>
+      <button class="lb">த</button>
+    </div>
+    <div class="theme-btn" onclick="toggleTheme()">☀️</div>
+    <button class="btn bp bsm" onclick="go('portal')">Portal →</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="pg-home" class="pg on">
+  <div class="hero">
+    <div class="hero-bg-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><span class="bdot"></span>Ranked #1 — Western Province 2025</div>
+      <h1>Empowering<br>Future Leaders</h1>
+      <p class="hero-sub">Where academic excellence meets inspired teaching. Nurturing curious minds that change the world.</p>
+      <div class="hero-ctas">
+        <button class="btn bp" onclick="go('results')">📊 View Results</button>
+        <button class="btn bg" onclick="go('portal')">🎓 Student Portal</button>
+        <button class="btn bg" onclick="go('admissions')">📝 Admissions</button>
+      </div>
+    </div>
+    <div class="scroll-ind" onclick="document.getElementById('stats').scrollIntoView({behavior:'smooth'})">
+      <span class="scroll-text">Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats">
+    <div class="stat-item"><div class="stat-num">3,200+</div><div class="stat-lbl">Students Enrolled</div></div>
+    <div class="stat-item"><div class="stat-num">98%</div><div class="stat-lbl">Pass Rate</div></div>
+    <div class="stat-item"><div class="stat-num">150+</div><div class="stat-lbl">Expert Faculty</div></div>
+    <div class="stat-item"><div class="stat-num">45 Yrs</div><div class="stat-lbl">Of Excellence</div></div>
+    <div class="stat-item"><div class="stat-num">320+</div><div class="stat-lbl">Awards Won</div></div>
+  </div>
+
+  <!-- ABOUT SPLIT -->
+  <div class="sec">
+    <div class="about-split">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=700&q=80" alt="Students learning">
+        <div class="about-img-badge">
+          <div class="about-badge-icon">🏆</div>
+          <div><div class="about-badge-num">98%</div><div class="about-badge-lbl">Pass Rate 2025</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-badge">About Us</div>
+        <h2 class="sec-title">A Legacy of Excellence Since 1980</h2>
+        <p class="sec-sub" style="margin-bottom:20px">Horizon Academy has been at the forefront of quality education in Sri Lanka for over four decades — shaping bright minds and building strong character.</p>
+        <p style="font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:26px">Our holistic approach blends rigorous academics with a rich co-curricular life, preparing students not just for examinations but for life itself. We believe every child has unique potential waiting to be unlocked.</p>
+        <div style="display:flex;gap:28px;margin-bottom:28px">
+          <div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--blue3)">150+</div><div style="font-size:12px;color:var(--text3)">Qualified Teachers</div></div>
+          <div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--blue3)">30+</div><div style="font-size:12px;color:var(--text3)">Sports & Clubs</div></div>
+          <div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--blue3)">6</div><div style="font-size:12px;color:var(--text3)">Science Labs</div></div>
+        </div>
+        <button class="btn bp" onclick="go('about')">Our Story →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- GALLERY -->
+  <div class="sec">
+    <div class="sec-badge">Campus Life</div>
+    <h2 class="sec-title">Life at Horizon Academy</h2>
+    <p class="sec-sub" style="margin-bottom:32px">A vibrant campus where learning goes beyond the classroom — every corner is an opportunity.</p>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="grid-row:1/3">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=75" alt="School building">
+        <div class="gallery-caption">📍 Main Academic Block</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=75" alt="Students collaborating">
+        <div class="gallery-caption">💡 Innovation Lab</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=400&q=75" alt="Sports">
+        <div class="gallery-caption">⚽ Sports Complex</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=400&q=75" alt="Library">
+        <div class="gallery-caption">📚 Library & Resource Centre</div>
+      </div>
+      <div class="gallery-item" style="position:relative">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=75" alt="More">
+        <div class="gallery-more">
+          <div class="gallery-more-num">+24</div>
+          <div class="gallery-more-text">More Photos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- CAMPUS LIFE SLIDER -->
+  <div class="sec">
+    <div class="sec-badge">Experience</div>
+    <h2 class="sec-title">Where Passion Meets Purpose</h2>
+    <div class="campus-slides" style="margin-top:32px" id="slides">
+      <div class="slide on">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=1200&q=70" alt="Sports">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <div class="slide-tag" style="background:rgba(16,185,129,0.2);color:#10B981">⚽ Sports & Athletics</div>
+          <h3>Championship-Level Sports Culture</h3>
+          <p>From cricket to swimming, our students compete nationally and internationally, developing discipline, teamwork and resilience.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=70" alt="Science">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <div class="slide-tag" style="background:rgba(59,130,246,0.2);color:#60A5FA">🔬 STEM & Research</div>
+          <h3>Pioneering Science Education</h3>
+          <p>Our six modern laboratories and innovation hub give students hands-on experience in cutting-edge scientific research.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=1200&q=70" alt="Arts">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <div class="slide-tag" style="background:rgba(245,158,11,0.2);color:#F59E0B">🎭 Arts & Culture</div>
+          <h3>Celebrating Creative Expression</h3>
+          <p>Music, drama, visual arts, and dance flourish in our 1,200-seat auditorium and dedicated arts spaces.</p>
+        </div>
+      </div>
+      <div class="slide-dots" id="sdots">
+        <div class="sdot on" onclick="goSlide(0)"></div>
+        <div class="sdot" onclick="goSlide(1)"></div>
+        <div class="sdot" onclick="goSlide(2)"></div>
+      </div>
+      <div class="slide-arrows">
+        <div class="sarr" onclick="prevSlide()">‹</div>
+        <div class="sarr" onclick="nextSlide()">›</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- WHY US -->
+  <div class="sec">
+    <div class="sec-badge">Why Choose Us</div>
+    <h2 class="sec-title">Built for Tomorrow</h2>
+    <p class="sec-sub" style="margin-bottom:32px">Everything at Horizon is designed to give your child every advantage in an evolving world.</p>
+    <div class="feat-grid">
+      <div class="glass feat-card"><div class="feat-icon ic-b">🏛️</div><h3>World-Class Faculty</h3><p>150+ highly qualified educators committed to personalized, outcome-driven learning for every student.</p></div>
+      <div class="glass feat-card"><div class="feat-icon ic-a">🔬</div><h3>Modern Laboratories</h3><p>Six state-of-the-art science and computer labs with the latest equipment and research facilities.</p></div>
+      <div class="glass feat-card"><div class="feat-icon ic-g">🏆</div><h3>Award-Winning Results</h3><p>Consistent district toppers and national champions across academic, sports and cultural disciplines.</p></div>
+      <div class="glass feat-card"><div class="feat-icon ic-p">🌐</div><h3>Global Curriculum</h3><p>Cambridge-integrated syllabus preparing students for prestigious universities worldwide.</p></div>
+      <div class="glass feat-card"><div class="feat-icon ic-t">💡</div><h3>Innovation Hub</h3><p>Dedicated STEM center with robotics, AI, and entrepreneurship programmes for future innovators.</p></div>
+      <div class="glass feat-card"><div class="feat-icon ic-r">🤝</div><h3>Counselling & Wellbeing</h3><p>Full-time school counsellors, mental health support, and a caring community for every student.</p></div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- FACILITIES -->
+  <div class="sec">
+    <div class="sec-badge">Infrastructure</div>
+    <h2 class="sec-title">World-Class Facilities</h2>
+    <p class="sec-sub" style="margin-bottom:28px">Every facility is designed to inspire, enable, and push boundaries.</p>
+    <div class="fac-grid">
+      <div class="fac-card">
+        <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=500&q=70" alt="Building">
+        <div class="fac-overlay"></div>
+        <div class="fac-body"><div class="fac-icon">📚</div><div class="fac-name">Central Library</div><div class="fac-desc">50,000+ volumes & digital resources</div></div>
+      </div>
+      <div class="fac-card">
+        <img src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=500&q=70" alt="Computer Lab">
+        <div class="fac-overlay"></div>
+        <div class="fac-body"><div class="fac-icon">💻</div><div class="fac-name">Computer Centre</div><div class="fac-desc">300 high-spec workstations</div></div>
+      </div>
+      <div class="fac-card">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=500&q=70" alt="Sports">
+        <div class="fac-overlay"></div>
+        <div class="fac-body"><div class="fac-icon">🏊</div><div class="fac-name">Olympic Pool & Grounds</div><div class="fac-desc">Competition-grade sports facilities</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- ACHIEVEMENTS -->
+  <div class="sec">
+    <div class="sec-badge">Achievements</div>
+    <h2 class="sec-title">Our Proud Track Record</h2>
+    <div class="ach-grid" style="margin-top:32px">
+      <div class="glass ach-card"><div class="ach-icon">🥇</div><div class="ach-num">320+</div><div class="ach-lbl">National Awards</div></div>
+      <div class="glass ach-card"><div class="ach-icon">🎓</div><div class="ach-num">98%</div><div class="ach-lbl">University Placement</div></div>
+      <div class="glass ach-card"><div class="ach-icon">🌍</div><div class="ach-num">45+</div><div class="ach-lbl">International Exchanges</div></div>
+      <div class="glass ach-card"><div class="ach-icon">⚽</div><div class="ach-num">18</div><div class="ach-lbl">Sports Championships</div></div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- UPCOMING EVENTS -->
+  <div class="sec">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+      <div><div class="sec-badge">Calendar</div><h2 class="sec-title">Upcoming Events</h2></div>
+      <button class="btn bg bsm" onclick="go('notifs')">All Events →</button>
+    </div>
+    <div class="events-list">
+      <div class="event-item"><div class="event-date"><div class="event-day">25</div><div class="event-month">Apr</div></div><div class="event-body"><div class="event-title">A/L Admit Card Collection — Grade 11</div><div class="event-meta"><span>📍 Main Office, 7:30 AM – 3:30 PM</span></div></div><span class="event-tag" style="background:rgba(245,158,11,0.15);color:#F59E0B">Exam</span></div>
+      <div class="event-item"><div class="event-date"><div class="event-day">30</div><div class="event-month">Apr</div></div><div class="event-body"><div class="event-title">Parent-Teacher Meeting — Terms 2 Reports</div><div class="event-meta"><span>📍 Main Hall, 9:00 AM – 1:00 PM</span></div></div><span class="event-tag" style="background:rgba(59,130,246,0.15);color:#60A5FA">Meeting</span></div>
+      <div class="event-item"><div class="event-date"><div class="event-day">10</div><div class="event-month">May</div></div><div class="event-body"><div class="event-title">Annual Cultural Festival 2026</div><div class="event-meta"><span>📍 School Auditorium, All Day</span></div></div><span class="event-tag" style="background:rgba(16,185,129,0.15);color:#10B981">Event</span></div>
+      <div class="event-item"><div class="event-date"><div class="event-day">15</div><div class="event-month">May</div></div><div class="event-body"><div class="event-title">District Science Olympiad — Team Selection</div><div class="event-meta"><span>📍 Science Block, 8:00 AM</span></div></div><span class="event-tag" style="background:rgba(139,92,246,0.15);color:#A78BFA">Competition</span></div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- NEWS -->
+  <div class="sec">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px">
+      <div><div class="sec-badge">Latest</div><h2 class="sec-title">News & Announcements</h2></div>
+      <button class="btn bg bsm" onclick="go('notifs')">View All →</button>
+    </div>
+    <div class="news-row">
+      <div class="glass news-big" style="cursor:pointer" onclick="go('notifs')">
+        <div class="news-big-img"><img src="https://images.unsplash.com/photo-1532649842991-74a82fb52f26?w=600&q=75" alt="Science Olympiad"></div>
+        <div class="news-big-body">
+          <span class="ntag ta">Achievement</span>
+          <div class="ndate" style="margin-top:8px">April 18, 2026</div>
+          <div class="ntitle" style="font-size:17px;margin:8px 0">5 Gold Medals at the National Science Olympiad 2026</div>
+          <div class="nexc">Horizon Academy students dominated the 2026 National Science Olympiad held in Kandy, bringing home 5 gold and 3 silver medals — the best performance in our school's history.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="glass news-sm" onclick="go('notifs')">
+          <span class="ntag te">Exam</span>
+          <div class="ndate">April 20, 2026</div>
+          <div class="ntitle">Grade 11 A/L Timetable Released</div>
+          <div class="nexc">Collect admit cards from April 25–27 at the main office.</div>
+        </div>
+        <div class="glass news-sm" onclick="go('notifs')">
+          <span class="ntag tv">Event</span>
+          <div class="ndate">April 15, 2026</div>
+          <div class="ntitle">Cultural Festival Registrations Open</div>
+          <div class="nexc">Sign up for music, dance, drama and visual arts before May 1.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dvd"></div>
+
+  <!-- TESTIMONIALS -->
+  <div class="sec">
+    <div class="sec-badge">Community</div>
+    <h2 class="sec-title">What Our Community Says</h2>
+    <div class="testi-wrap" style="margin-top:32px">
+      <div class="glass testi"><div class="stars">★★★★★</div><p class="testi-q">"Horizon Academy transformed my daughter into a confident, academically strong individual. The teachers here genuinely care about every child's growth."</p><div class="testi-foot"><div class="tav" style="background:linear-gradient(135deg,#7C3AED,#A78BFA)">PF</div><div><div class="tname">Priya Fernando</div><div class="trole">Parent · Grade 10</div></div></div></div>
+      <div class="glass testi"><div class="stars">★★★★★</div><p class="testi-q">"The resources, the mentors, the environment — everything here is built for success. I secured my dream university placement thanks to this school."</p><div class="testi-foot"><div class="tav" style="background:linear-gradient(135deg,#0F766E,#2DD4BF)">AK</div><div><div class="tname">Ashan Kumara</div><div class="trole">Alumni · Batch 2024</div></div></div></div>
+      <div class="glass testi"><div class="stars">★★★★★</div><p class="testi-q">"As an educator, I'm proud to be part of this institution. Our collaborative culture and modern facilities make every class truly inspiring."</p><div class="testi-foot"><div class="tav" style="background:linear-gradient(135deg,#B45309,#FCD34D)">SR</div><div><div class="tname">Mr. S. Rajapaksa</div><div class="trole">Senior Teacher · Science Dept.</div></div></div></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-g">
+      <div class="ft-brand">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:4px"><div class="nl-icon">HA</div><span style="font-family:'Sora',sans-serif;font-weight:700;font-size:16px">Horizon Academy</span></div>
+        <p>Empowering Future Leaders through academic excellence, innovation, and holistic development since 1980. Colombo, Sri Lanka.</p>
+        <div class="ft-social" style="margin-top:14px">
+          <div class="soc">📘</div><div class="soc">📷</div><div class="soc">🐦</div><div class="soc">▶️</div>
+        </div>
+      </div>
+      <div class="ft-col"><h5>Quick Links</h5><span class="fl2" onclick="go('about')">About Us</span><span class="fl2" onclick="go('admissions')">Admissions</span><span class="fl2" onclick="go('results')">Results Portal</span><span class="fl2" onclick="go('portal')">Student Portal</span><span class="fl2" onclick="go('notifs')">Announcements</span></div>
+      <div class="ft-col"><h5>Resources</h5><span class="fl2">Academic Calendar</span><span class="fl2">E-Library</span><span class="fl2">Scholarships</span><span class="fl2">Alumni Network</span><span class="fl2">Career Guidance</span></div>
+      <div class="ft-col"><h5>Contact</h5><span class="fl2">📍 123 Academy Road, Colombo 03</span><span class="fl2">📞 +94 11 234 5678</span><span class="fl2">✉ info@horizonacademy.lk</span><span class="fl2">🕐 Mon–Fri: 7:30 AM – 4:30 PM</span></div>
+    </div>
+    <div class="ft-bot"><p>© 2026 Horizon Academy. All rights reserved.</p><p>Privacy Policy · Terms · Sitemap</p></div>
+  </footer>
+</div>
+
+<!-- PORTAL -->
+<div id="pg-portal" class="pg">
+  <div class="auth-wrap">
+    <div class="glass auth-card">
+      <div style="text-align:center;margin-bottom:24px">
+        <div class="auth-logo">HA</div>
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Welcome Back</h2>
+        <p style="font-size:13px;color:var(--text2)">Sign in to your Horizon Academy portal</p>
+      </div>
+      <div class="rtabs">
+        <div class="rtab on" onclick="setRole(this)">🎓 Student</div>
+        <div class="rtab" onclick="setRole(this)">👨‍👩‍👧 Parent</div>
+        <div class="rtab" onclick="setRole(this)">⚙️ Admin</div>
+      </div>
+      <div class="fi"><label class="fl">Email Address</label><input id="em" type="email" class="finp" placeholder="student@horizonacademy.lk"></div>
+      <div class="fi"><label class="fl">Password</label><input id="pw" type="password" class="finp" placeholder="••••••••"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text2);cursor:pointer"><input type="checkbox"> Remember me</label><a style="font-size:12.5px;color:var(--blue3);cursor:pointer">Forgot password?</a></div>
+      <div id="lerr" class="ferr">Invalid credentials. Use: student@demo.lk / demo123</div>
+      <button class="btn bp" style="width:100%;justify-content:center;padding:12px;font-size:14px" onclick="doLogin()">Sign In →</button>
+      <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--text3)">Demo: student@demo.lk / demo123</p>
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border);text-align:center"><p style="font-size:12.5px;color:var(--text3)">New student? <a style="color:var(--blue3);cursor:pointer" onclick="go('admissions')">Apply for Admission →</a></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="pg-dashboard" class="pg">
+  <div class="dash-wrap">
+    <div class="dsb">
+      <div class="dsb-user">
+        <div class="dsb-av">AK</div>
+        <div class="dsb-nm">Ashan Kumara</div>
+        <div class="dsb-rl">Grade 11 · Science</div>
+      </div>
+      <div class="dsi on"><span class="dsi-ico">📊</span>Overview</div>
+      <div class="dsi"><span class="dsi-ico">📝</span>My Results</div>
+      <div class="dsi"><span class="dsi-ico">📅</span>Attendance</div>
+      <div class="dsi"><span class="dsi-ico">🔔</span>Notifications</div>
+      <div class="dsi"><span class="dsi-ico">📚</span>Assignments</div>
+      <div class="dsi"><span class="dsi-ico">👤</span>My Profile</div>
+      <div class="dsi" style="margin-top:12px" onclick="doLogout()"><span class="dsi-ico">🚪</span>Sign Out</div>
+    </div>
+    <div class="dc">
+      <div class="dc-greet">Good morning, Ashan! 👋</div>
+      <div class="dc-sub">Term 2, 2026 — Your academic snapshot</div>
+      <div class="sg">
+        <div class="glass sc"><div class="sc-lbl">Overall GPA</div><div class="sc-val" style="background:linear-gradient(135deg,#3B82F6,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3.85</div><div class="sc-ch">↑ +0.12 from last term</div></div>
+        <div class="glass sc"><div class="sc-lbl">Attendance</div><div class="sc-val" style="color:#10B981">94%</div><div class="sc-ch">✓ Above threshold</div></div>
+        <div class="glass sc"><div class="sc-lbl">Class Rank</div><div class="sc-val">4th</div><div class="sc-ch">↑ +2 positions</div></div>
+        <div class="glass sc"><div class="sc-lbl">Pending</div><div class="sc-val" style="color:#F59E0B">2</div><div class="sc-ch" style="color:var(--text3)">assignments due</div></div>
+      </div>
+      <div class="glass chart-box">
+        <div class="cb-title">Performance Trend — Last 4 Terms</div>
+        <canvas id="dChart" height="160"></canvas>
+      </div>
+      <div class="glass" style="padding:0;overflow:hidden;border-radius:var(--r)">
+        <table class="tbl">
+          <thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Class Rank</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr><td>Mathematics</td><td>94/100</td><td><span class="gb ga">A+</span></td><td>2nd / 45</td><td style="color:#10B981">↑</td></tr>
+            <tr><td>Physics</td><td>87/100</td><td><span class="gb ga">A</span></td><td>5th / 45</td><td style="color:#10B981">↑</td></tr>
+            <tr><td>Chemistry</td><td>82/100</td><td><span class="gb gb2">B+</span></td><td>8th / 45</td><td style="color:var(--text3)">→</td></tr>
+            <tr><td>Biology</td><td>90/100</td><td><span class="gb ga">A</span></td><td>3rd / 45</td><td style="color:#10B981">↑</td></tr>
+            <tr><td>English</td><td>78/100</td><td><span class="gb gb2">B</span></td><td>11th / 45</td><td style="color:#EF4444">↓</td></tr>
+            <tr><td>Sinhala</td><td>88/100</td><td><span class="gb ga">A</span></td><td>4th / 45</td><td style="color:#10B981">↑</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="pg-results" class="pg">
+  <div class="rs-wrap">
+    <div class="sec-badge">Results Portal</div>
+    <h2 class="sec-title" style="margin-top:10px">Student Results</h2>
+    <p style="color:var(--text2);font-size:15px;margin-top:8px">Search by Student ID or Admission Number</p>
+    <div class="rs-box">
+      <input class="rs-inp" id="rsq" placeholder="Enter Student ID (e.g. HA2024-001)">
+      <button class="btn bp" onclick="doSearch()">Search</button>
+    </div>
+    <div id="rsArea" style="display:none">
+      <div class="glass rs-card">
+        <div class="rs-hdr">
+          <div><h3>Ashan Kumara</h3><p>ID: HA2024-001 · Grade 11 Science · 2026</p><p style="margin-top:2px">Admission: 2019 · D.O.B: March 12, 2009</p></div>
+          <div class="gpa-big"><div class="gpa-n">A</div><div class="gpa-l">Overall Grade</div><div style="font-size:12px;color:var(--success);margin-top:3px">GPA 3.85 · Top 10%</div></div>
+        </div>
+        <div style="height:180px;margin-bottom:20px"><canvas id="rChart"></canvas></div>
+        <table class="tbl">
+          <thead><tr><th>Subject</th><th>Marks</th><th>Max</th><th>Grade</th><th>Position</th></tr></thead>
+          <tbody>
+            <tr><td>Mathematics</td><td>94</td><td>100</td><td><span class="gb ga">A+</span></td><td>2nd / 45</td></tr>
+            <tr><td>Physics</td><td>87</td><td>100</td><td><span class="gb ga">A</span></td><td>5th / 45</td></tr>
+            <tr><td>Chemistry</td><td>82</td><td>100</td><td><span class="gb gb2">B+</span></td><td>8th / 45</td></tr>
+            <tr><td>Biology</td><td>90</td><td>100</td><td><span class="gb ga">A</span></td><td>3rd / 45</td></tr>
+            <tr><td>English</td><td>78</td><td>100</td><td><span class="gb gb2">B</span></td><td>11th / 45</td></tr>
+            <tr><td>Sinhala</td><td>88</td><td>100</td><td><span class="gb ga">A</span></td><td>4th / 45</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <button class="btn bp">📄 Download PDF Report Card</button>
+          <button class="btn bg">📊 Detailed Analytics</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMISSIONS -->
+<div id="pg-admissions" class="pg">
+  <div class="adm-hero">
+    <div class="adm-hero-img"></div>
+    <div class="adm-hero-content">
+      <div class="sec-badge">Admissions 2026–27</div>
+      <h2 class="sec-title" style="margin-top:12px">Begin Your Journey at<br>Horizon Academy</h2>
+      <p style="color:var(--text2);max-width:480px;margin:12px auto 24px;font-size:15px">Applications open for Grades 1–13. Join a community of learners, leaders, and innovators.</p>
+      <button class="btn bp" onclick="document.getElementById('appForm').scrollIntoView({behavior:'smooth'})">Apply Now →</button>
+    </div>
+  </div>
+  <div style="padding:60px 40px;max-width:1100px;margin:0 auto">
+    <div class="sec-badge">Facilities</div>
+    <h2 class="sec-title" style="margin-bottom:20px">World-Class Infrastructure</h2>
+    <div class="fac-sec-grid">
+      <div class="fac-sec-card"><div class="fac-sec-icon">🔬</div><h4>Science Labs</h4><p>6 fully equipped laboratories</p></div>
+      <div class="fac-sec-card"><div class="fac-sec-icon">💻</div><h4>Computer Centre</h4><p>300 modern workstations</p></div>
+      <div class="fac-sec-card"><div class="fac-sec-icon">📚</div><h4>Library</h4><p>50,000+ book collection</p></div>
+      <div class="fac-sec-card"><div class="fac-sec-icon">🏊</div><h4>Olympic Pool</h4><p>Competition-grade facility</p></div>
+      <div class="fac-sec-card"><div class="fac-sec-icon">🎭</div><h4>Auditorium</h4><p>1,200-seat performing arts hall</p></div>
+      <div class="fac-sec-card"><div class="fac-sec-icon">🍽️</div><h4>Cafeteria</h4><p>Healthy, nutritious meals daily</p></div>
+    </div>
+    <div style="margin-top:50px"><div class="sec-badge">Process</div><h2 class="sec-title" style="margin-bottom:20px">How to Apply</h2>
+      <div style="max-width:600px">
+        <div class="step-item"><div class="step-n">1</div><div><h4 style="font-size:14px;font-weight:600;margin-bottom:3px">Submit Online Application</h4><p style="font-size:13px;color:var(--text2)">Complete the form below with student and parent/guardian details.</p></div></div>
+        <div class="step-item"><div class="step-n">2</div><div><h4 style="font-size:14px;font-weight:600;margin-bottom:3px">Document Submission</h4><p style="font-size:13px;color:var(--text2)">Submit birth certificate, previous school reports, and photographs.</p></div></div>
+        <div class="step-item"><div class="step-n">3</div><div><h4 style="font-size:14px;font-weight:600;margin-bottom:3px">Entrance Assessment</h4><p style="font-size:13px;color:var(--text2)">Attend the aptitude assessment scheduled by the admissions office.</p></div></div>
+        <div class="step-item"><div class="step-n">4</div><div><h4 style="font-size:14px;font-weight:600;margin-bottom:3px">Interview & Confirmation</h4><p style="font-size:13px;color:var(--text2)">Parent-student interview followed by offer letter and fee confirmation.</p></div></div>
+      </div>
+    </div>
+    <div id="appForm" style="margin-top:50px">
+      <div class="sec-badge">Apply Now</div>
+      <h2 class="sec-title" style="margin-bottom:24px">Online Application Form</h2>
+      <div class="glass" style="padding:30px;max-width:700px;border-radius:var(--r2)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="fi"><label class="fl">First Name</label><input type="text" class="finp" placeholder="Kamal"></div>
+          <div class="fi"><label class="fl">Last Name</label><input type="text" class="finp" placeholder="Perera"></div>
+          <div class="fi"><label class="fl">Date of Birth</label><input type="date" class="finp"></div>
+          <div class="fi"><label class="fl">Applying for Grade</label><select class="finp"><option>Grade 1</option><option>Grade 6</option><option>Grade 10</option><option>Grade 12</option></select></div>
+          <div class="fi"><label class="fl">Parent/Guardian Name</label><input type="text" class="finp" placeholder="Full name"></div>
+          <div class="fi"><label class="fl">Contact Number</label><input type="tel" class="finp" placeholder="+94 77 123 4567"></div>
+        </div>
+        <div class="fi" style="margin-top:4px"><label class="fl">Email Address</label><input type="email" class="finp" placeholder="parent@email.com"></div>
+        <div class="fi"><label class="fl">Previous School</label><input type="text" class="finp" placeholder="Name of previous school"></div>
+        <div class="fi"><label class="fl">Additional Information</label><textarea class="finp" style="resize:vertical;min-height:80px" placeholder="Any special requirements, achievements, or notes..."></textarea></div>
+        <button class="btn bp" style="width:100%;justify-content:center;padding:12px;margin-top:6px;font-size:14px" onclick="alert('Application submitted! You will receive a confirmation email within 24 hours.')">Submit Application →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div id="pg-notifs" class="pg">
+  <div class="ni-wrap">
+    <div class="sec-badge">Notices</div>
+    <h2 class="sec-title" style="margin-top:10px">Notifications & Announcements</h2>
+    <div class="ni-filters">
+      <button class="nf-btn on">All</button>
+      <button class="nf-btn">📝 Exams</button>
+      <button class="nf-btn">📅 Events</button>
+      <button class="nf-btn">🚨 Urgent</button>
+      <button class="nf-btn">🏆 Achievements</button>
+    </div>
+    <div class="nitem unrd"><div class="ni-icon ic-a">📝</div><div class="ni-bdy"><span class="ntag te" style="display:inline-block;margin-bottom:6px">Exam</span><div class="ni-ttl">Grade 11 A/L Examination Timetable Released</div><div class="ni-txt">The timetable for the upcoming Advanced Level examinations has been officially released. All Grade 11 students must collect their admit cards from the main office between April 25–27.</div><div class="ni-time">April 20, 2026 · 09:15 AM</div></div><div class="ni-dot"></div></div>
+    <div class="nitem unrd"><div class="ni-icon ic-r" style="background:rgba(239,68,68,0.12)">🚨</div><div class="ni-bdy"><span class="ntag tu" style="display:inline-block;margin-bottom:6px">Urgent</span><div class="ni-ttl">School Closed — Public Holiday April 23</div><div class="ni-txt">Due to the national public holiday, all academic activities are suspended. Online classes will proceed as scheduled via the Student Portal.</div><div class="ni-time">April 19, 2026 · 04:00 PM</div></div><div class="ni-dot"></div></div>
+    <div class="nitem"><div class="ni-icon ic-b">🏆</div><div class="ni-bdy"><span class="ntag ta" style="display:inline-block;margin-bottom:6px">Achievement</span><div class="ni-ttl">5 Gold Medals — National Science Olympiad 2026</div><div class="ni-txt">Our students Kamal, Nimsha, Ravindu, Sehansa, and Tharushi brought immense pride to Horizon Academy with an outstanding performance at the National Science Olympiad in Kandy.</div><div class="ni-time">April 18, 2026 · 11:30 AM</div></div></div>
+    <div class="nitem"><div class="ni-icon ic-g" style="background:rgba(16,185,129,0.12)">🎭</div><div class="ni-bdy"><span class="ntag tv" style="display:inline-block;margin-bottom:6px">Event</span><div class="ni-ttl">Annual Cultural Festival — Registrations Open</div><div class="ni-txt">Registration for the Annual Cultural Festival (May 10) is now open. Students may sign up for music, dance, drama, and visual arts categories until May 1.</div><div class="ni-time">April 15, 2026 · 02:00 PM</div></div></div>
+    <div class="nitem"><div class="ni-icon ic-a">📚</div><div class="ni-bdy"><span class="ntag te" style="display:inline-block;margin-bottom:6px">Exam</span><div class="ni-ttl">Term 2 Mid-Term Results — Now Published</div><div class="ni-txt">Term 2 mid-term results are available on the Student Portal. Parents are requested to sign and return the result slip by April 30.</div><div class="ni-time">April 12, 2026 · 10:00 AM</div></div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="pg-about" class="pg">
+  <div class="ab-wrap">
+    <div class="about-split">
+      <div>
+        <div class="sec-badge">Our Story</div>
+        <h2 class="sec-title" style="margin-bottom:16px">45 Years of Shaping Brilliant Minds</h2>
+        <p style="font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:20px">Founded in 1980 with a vision of inclusive, excellence-driven education, Horizon Academy has grown into one of Sri Lanka's most respected educational institutions.</p>
+        <div class="glass" style="padding:20px;border-radius:var(--r);margin-bottom:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="padding:12px;border-radius:9px;background:rgba(59,130,246,0.06)"><div style="font-size:11px;color:var(--blue3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">🎯 Vision</div><p style="font-size:13px;color:var(--text2)">To be the leading institution nurturing globally competitive, well-rounded individuals.</p></div>
+          <div style="padding:12px;border-radius:9px;background:rgba(16,185,129,0.06)"><div style="font-size:11px;color:#10B981;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">🌱 Mission</div><p style="font-size:13px;color:var(--text2)">Quality, inclusive, and innovative education developing curiosity, integrity, and responsibility.</p></div>
+        </div>
+        <div class="tl">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">1980</div><div class="tl-ttl">Founded</div><div class="tl-txt">Established with 120 students and 12 teachers in Colombo.</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">1995</div><div class="tl-ttl">National Recognition</div><div class="tl-txt">Received the National Award for Educational Excellence.</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">2005</div><div class="tl-ttl">Cambridge Affiliation</div><div class="tl-txt">Became an affiliated Cambridge International School.</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">2015</div><div class="tl-ttl">Innovation Hub</div><div class="tl-txt">Opened state-of-the-art STEM Innovation Center.</div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-yr">2026</div><div class="tl-ttl">Digital Transformation</div><div class="tl-txt">Launched fully integrated digital learning platform.</div></div>
+        </div>
+      </div>
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=700&q=80" alt="School campus">
+        <div class="about-img-badge">
+          <div class="about-badge-icon">🏆</div>
+          <div><div class="about-badge-num">#1</div><div class="about-badge-lbl">Western Province 2025</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:60px"><div class="sec-badge">Leadership</div><h2 class="sec-title" style="margin-bottom:4px">Meet Our Leadership Team</h2>
+      <div class="staff-g">
+        <div class="glass stf"><div class="stf-av" style="background:linear-gradient(135deg,#1E3A8A,#3B82F6)">DR</div><div class="stf-nm">Dr. Roshan Silva</div><div class="stf-rl">Principal</div></div>
+        <div class="glass stf"><div class="stf-av" style="background:linear-gradient(135deg,#7C3AED,#A78BFA)">NP</div><div class="stf-nm">Ms. Nisha Perera</div><div class="stf-rl">Vice Principal</div></div>
+        <div class="glass stf"><div class="stf-av" style="background:linear-gradient(135deg,#0F766E,#2DD4BF)">AJ</div><div class="stf-nm">Mr. Anura Jayasena</div><div class="stf-rl">Head of Sciences</div></div>
+        <div class="glass stf"><div class="stf-av" style="background:linear-gradient(135deg,#B45309,#F59E0B)">SD</div><div class="stf-nm">Mrs. S. De Silva</div><div class="stf-rl">Head of Arts</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="pg-contact" class="pg">
+  <div class="sec">
+    <div class="sec-badge">Get In Touch</div>
+    <h2 class="sec-title" style="margin-bottom:12px">Contact Us</h2>
+    <p class="sec-sub" style="margin-bottom:36px">We'd love to hear from you — reach out for admissions, queries, or general information.</p>
+    <div class="ct-grid">
+      <div>
+        <div class="ci"><div class="ci-icon">📍</div><div><div class="ci-lbl">Address</div><div class="ci-val">123 Academy Road, Colombo 03, Sri Lanka</div></div></div>
+        <div class="ci"><div class="ci-icon">📞</div><div><div class="ci-lbl">Phone</div><div class="ci-val">+94 11 234 5678</div></div></div>
+        <div class="ci"><div class="ci-icon">✉️</div><div><div class="ci-lbl">Email</div><div class="ci-val">info@horizonacademy.lk</div></div></div>
+        <div class="ci"><div class="ci-icon">🕐</div><div><div class="ci-lbl">Office Hours</div><div class="ci-val">Mon–Fri: 7:30 AM – 4:30 PM</div></div></div>
+        <div class="map-ph"><div class="map-ph-over"><span>📍</span><p>123 Academy Road, Colombo 03</p></div></div>
+      </div>
+      <div class="glass" style="padding:28px;border-radius:var(--r2)">
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:18px">Send a Message</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="fi"><label class="fl">First Name</label><input type="text" class="finp" placeholder="Your name"></div>
+          <div class="fi"><label class="fl">Last Name</label><input type="text" class="finp" placeholder="Last name"></div>
+        </div>
+        <div class="fi"><label class="fl">Email</label><input type="email" class="finp" placeholder="your@email.com"></div>
+        <div class="fi"><label class="fl">Subject</label><select class="finp"><option>General Inquiry</option><option>Admissions</option><option>Academic Query</option><option>Feedback</option></select></div>
+        <div class="fi"><label class="fl">Message</label><textarea class="finp" style="resize:vertical;min-height:90px" placeholder="How can we help you?"></textarea></div>
+        <button class="btn bp" style="width:100%;justify-content:center;padding:12px;font-size:14px" onclick="alert('Message sent! We will respond within 24 hours.')">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<button class="cb-btn" onclick="toggleChat()">💬</button>
+<div class="cb-win" id="cbwin">
+  <div class="cb-hdr"><div class="cb-hdr-t"><span class="cb-online"></span>HA Assistant</div><span style="cursor:pointer;font-size:16px;color:var(--text3)" onclick="toggleChat()">✕</span></div>
+  <div class="cb-msgs" id="cbmsgs">
+    <div class="cm bot">Hi! I'm the Horizon Academy assistant. How can I help?</div>
+    <div class="cm bot">Ask about admissions, results, fees, or school timings.</div>
+  </div>
+  <div class="cb-inp"><input type="text" id="cbinp" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">↑</button></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('hide');
+  },2200);
+});
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>30);
+},{ passive:true });
+
+function go(id,el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg){pg.classList.add('on');}
+  document.querySelectorAll('.nlink').forEach(l=>l.classList.remove('on'));
+  if(el){el.classList.add('on');}
+  window.scrollTo(0,0);
+  if(id==='dashboard')setTimeout(initDChart,150);
+}
+
+let dark=true;
+function toggleTheme(){
+  dark=!dark;
+  document.body.classList.toggle('light',!dark);
+  document.querySelector('.theme-btn').textContent=dark?'☀️':'🌙';
+}
+
+document.querySelectorAll('.lb').forEach(b=>{
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.lb').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+
+document.querySelectorAll('.nf-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.nf-btn').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+
+function setRole(el){
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function doLogin(){
+  const e=document.getElementById('em').value;
+  const p=document.getElementById('pw').value;
+  if(e==='student@demo.lk'&&p==='demo123'){
+    document.getElementById('lerr').style.display='none';
+    go('dashboard');
+    setTimeout(initDChart,200);
+  } else {
+    document.getElementById('lerr').style.display='block';
+  }
+}
+function doLogout(){go('portal');}
+
+let dci=null,rci=null;
+function initDChart(){
+  const c=document.getElementById('dChart');
+  if(!c)return;
+  if(dci){dci.destroy();dci=null;}
+  dci=new Chart(c,{
+    type:'line',
+    data:{
+      labels:['T1 2025','T2 2025','T1 2026','T2 2026'],
+      datasets:[
+        {label:'GPA',data:[3.4,3.6,3.73,3.85],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.07)',tension:0.4,fill:true,pointBackgroundColor:'#3B82F6',pointRadius:5,yAxisID:'y'},
+        {label:'Attendance %',data:[88,91,93,94],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,0.05)',tension:0.4,fill:true,pointBackgroundColor:'#10B981',pointRadius:5,yAxisID:'y2'}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94A3B8',font:{size:12}}}},scales:{y:{ticks:{color:'#64748B',font:{size:11}},grid:{color:'rgba(59,130,246,0.06)'},min:2.5,max:4.2},y2:{position:'right',ticks:{color:'#64748B',font:{size:11},callback:v=>v+'%'},grid:{display:false},min:75,max:100}}}
+  });
+}
+
+function doSearch(){
+  const q=document.getElementById('rsq').value.trim();
+  if(q.length<3)return;
+  document.getElementById('rsArea').style.display='block';
+  setTimeout(initRChart,100);
+}
+
+function initRChart(){
+  const c=document.getElementById('rChart');
+  if(!c)return;
+  if(rci){rci.destroy();rci=null;}
+  rci=new Chart(c,{
+    type:'bar',
+    data:{
+      labels:['Maths','Physics','Chemistry','Biology','English','Sinhala'],
+      datasets:[{label:'Score',data:[94,87,82,90,78,88],backgroundColor:['rgba(59,130,246,0.75)','rgba(16,185,129,0.75)','rgba(245,158,11,0.75)','rgba(139,92,246,0.75)','rgba(236,72,153,0.75)','rgba(6,182,212,0.75)'],borderRadius:8,borderSkipped:false}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:'#64748B',font:{size:11}},grid:{color:'rgba(59,130,246,0.06)'},min:0,max:100},x:{ticks:{color:'#64748B',font:{size:11}},grid:{display:false}}}}
+  });
+}
+
+let si=0,st;
+function goSlide(n){
+  const s=document.querySelectorAll('.slide');
+  const d=document.querySelectorAll('.sdot');
+  s.forEach(x=>x.classList.remove('on'));
+  d.forEach(x=>x.classList.remove('on'));
+  si=n;
+  s[si].classList.add('on');
+  d[si].classList.add('on');
+}
+function nextSlide(){goSlide((si+1)%3);}
+function prevSlide(){goSlide((si+2)%3);}
+function startSlider(){st=setInterval(nextSlide,4500);}
+startSlider();
+document.getElementById('slides').addEventListener('mouseenter',()=>clearInterval(st));
+document.getElementById('slides').addEventListener('mouseleave',startSlider);
+
+function toggleChat(){
+  document.getElementById('cbwin').classList.toggle('open');
+}
+const bots={
+  'admission':['Applications for 2026–27 are now open! Visit our Admissions page or call +94 11 234 5678.'],
+  'result':['Results are available on our Results Portal. Enter your Student ID to get started.'],
+  'fee':['For current fee details, please contact admissions@horizonacademy.lk or call +94 11 234 5678.'],
+  'timing':['School hours: 7:30 AM – 1:30 PM, Mon–Fri. Office: 7:30 AM – 4:30 PM.'],
+  'contact':['📞 +94 11 234 5678 | ✉ info@horizonacademy.lk | 📍 123 Academy Road, Colombo 03'],
+  'exam':['Check our Notices page for the latest exam timetables and updates.'],
+  'portal':['Log in at the Student Portal using your school-issued email and password. Demo: student@demo.lk / demo123']
+};
+function sendChat(){
+  const inp=document.getElementById('cbinp');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  const box=document.getElementById('cbmsgs');
+  box.innerHTML+=`<div class="cm usr">${msg}</div>`;
+  inp.value='';
+  setTimeout(()=>{
+    const low=msg.toLowerCase();
+    let rep='I\'m not sure about that. Try asking about admissions, results, fees, timings, or the student portal!';
+    for(const[k,v] of Object.entries(bots)){if(low.includes(k)){rep=v[0];break;}}
+    box.innerHTML+=`<div class="cm bot">${rep}</div>`;
+    box.scrollTop=box.scrollHeight;
+  },700);
+  box.scrollTop=box.scrollHeight;
+}
+</script>
